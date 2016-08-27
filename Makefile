@@ -7,7 +7,8 @@ run-iso : myiso.iso
 myiso.iso: boot.flp
 	rm -f myiso/boot.bin
 	dd if=boot.flp of=myiso/boot.bin bs=512b count=2
-	mkisofs -no-emul-boot -boot-load-size 2 -o myiso.iso -b boot.bin myiso
+	truncate myiso/boot.bin --size 1228800  
+	mkisofs -o myiso.iso -b boot.bin myiso
 
 bsect.bin: bsect.s 
 	nasm -f bin -o bsect.bin bsect.s

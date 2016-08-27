@@ -26,13 +26,31 @@ _start:
 
         int 0x13                ; read next sector into 0x500
 
+		jc error 				; the carry flag is set on error (jump to handler)
+
         jmp 0x500               ; jump to second code segment
 
         ; these strings are included within the .text segment
-        ; they must be below any code to execute, otherwise
-        ; they are executed as invalid machine instructions
+        ; they must not be allowed to execute
         message db 'hello from section 1', 0
         jumping db 'jumping to next boot sector', 0
+		errormsg db 'Error occurred', 0
+
+error:
+		; print generic error message
+		mov si, errormsg
+		call print_string
+		call print_nl
+		
+		; print ascii code representation of error code (stored in ah)
+		mov al, ah
+		add al, 65d ; convert code to printable ascii (ascii A-Z)
+		mov ah, 0x0E
+		int 0x10
+		
+		call print_nl
+
+		jmp $  ; infinite loop
 
         ;; print null terminated string to terminal
         ;; AH selects video services sub function
