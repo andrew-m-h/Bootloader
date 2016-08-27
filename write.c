@@ -12,7 +12,7 @@ int main(int argc, char ** argv)
         exit(0);
     }
 
-    char boot_buf[1024];        //size of two 512b segments
+    char boot_buf[1024] = {0};        //size of two 512b segments
     FILE * bsect, * sect2, * out;
 
     //read in first boot segment (only 510 bytes)
