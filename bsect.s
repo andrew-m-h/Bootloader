@@ -10,10 +10,6 @@ _start:
         call print_string       ; Call our string-printing routine
         call print_nl
 
-        mov si, jumping
-        call print_string
-        call print_nl
-
         mov ax, 0x500           ; 0x500 is where then next boot sector is placed
         mov es, ax              ; ES is a segment register, holding the address
         xor bx, bx              ; int 13h reads the sector pointer at (es:bx)
@@ -27,6 +23,10 @@ _start:
         int 0x13                ; read next sector into 0x500
 
 		jc error 				; the carry flag is set on error (jump to handler)
+		
+        mov si, jumping
+        call print_string
+        call print_nl
 
         jmp 0x500               ; jump to second code segment
 
@@ -47,10 +47,9 @@ error:
 		add al, 65d ; convert code to printable ascii (ascii A-Z)
 		mov ah, 0x0E
 		int 0x10
-		
 		call print_nl
 
-		jmp $  ; infinite loop
+		jmp $
 
         ;; print null terminated string to terminal
         ;; AH selects video services sub function

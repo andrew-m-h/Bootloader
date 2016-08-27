@@ -1,8 +1,8 @@
 run-floppy : boot.flp
 	qemu-system-i386 -fda boot.flp
 
-#run-iso : myiso.iso
-#	qemu-system-i386 -cdrom myiso.iso
+run-iso : myiso.iso
+	qemu-system-i386 -cdrom myiso.iso
 
 myiso.iso: boot.flp
 	rm -f myiso/boot.bin
